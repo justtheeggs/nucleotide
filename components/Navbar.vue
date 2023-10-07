@@ -1,7 +1,7 @@
 <template>
   <!-- Navbar Dropdown 2 rows -->
   <section>
-    <div class="w-screen h-auto">
+    <div class="w-screen h-auto bg-cyan-950 text-white font-bold text-lg">
       <!-- NAVBAR -->
       <nav
         class="w-full h-auto max-w-[1600px] mx-auto font-inter lg:relative lg:top-0"
@@ -11,64 +11,50 @@
           class="flex flex-col py-6 lg:py-4 px-6 lg:flex-row lg:px-10 lg:items-center lg:justify-between xl:px-20"
         >
           <!-- SVG LOGO - YOU CAN REPLACE THIS -->
-          <a href="#"> Nucleotide </a>
+          <a href="#" class="text-4xl"> Nucleotide </a>
           <!-- MENU CONTENT 1 -->
           <div
             class="flex flex-col lg:flex lg:flex-row mt-14 lg:mt-0 space-y-8 lg:space-y-0 lg:space-x-1"
             :class="{ show: openMenu, hidden: !openMenu }"
           >
-            <!-- DROPDOWN -->
-            <div class="flex flex-col relative">
-              <a
-                x-on:click.prevent="menuOne = !menuOne"
-                href="#"
-                class="lg:hover:bg-gray-50 rounded-lg lg:px-6 lg:py-4 lg:hover:text-gray-800 flex flex-row"
-                x-bind:class="menuOne ? 'text-gray-800 lg:border lg:border-gray-600 lg:bg-gray-50' : 'text-black lg:border lg:border-white' "
-                >Component
-                <svg
-                  x-bind:class="menuOne ? 'rotate-180' : 'rotate-0' "
-                  class="fill-current transition"
-                  style="width: 24px; height: 24px"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
-                  />
-                </svg>
-              </a>
-              <!-- DROP DOWN MENU ONE -->
-            </div>
-            <a
-              href="#"
+            <NuxtLink class="lg:hover:bg-gray-50 font-inter rounded-lg lg:px-6 lg:py-4 lg:hover:text-gray-800">
+              Project Finder
+            </NuxtLink>
+            <NuxtLink
+              to="/about"
               class="lg:hover:bg-gray-50 font-inter rounded-lg lg:px-6 lg:py-4 lg:hover:text-gray-800"
-              >Templates</a
             >
-            <a
-              href="#"
-              class="lg:hover:bg-gray-50 font-inter rounded-lg lg:px-6 lg:py-4 lg:hover:text-gray-800"
-              >Pricing</a
-            >
-            <a
-              href="#"
-              class="lg:hover:bg-gray-50 font-inter rounded-lg lg:px-6 lg:py-4 lg:hover:text-gray-800 pb-8 lg:pb-0"
-              >FAQs</a
-            >
+              About
+            </NuxtLink>
           </div>
           <!-- MENU CONTENT 2 -->
           <div
             class="flex flex-col lg:flex lg:flex-row space-y-8 lg:space-y-0 lg:space-x-3"
             :class="{ show: openMenu, hidden: !openMenu }"
           >
-            <a
-              href="#"
-              class="lg:hover:bg-gray-50 font-inter rounded-lg lg:px-6 lg:py-4 lg:hover:text-gray-800"
-              >Sign Up</a
+            <NuxtLink
+              class="px-8 py-4 font-inter text-center text-white rounded-lg hover:bg-cyan-600 bg-cyan-700 inline-block my-8 lg:my-0"
+              to="/sign-in"
             >
-            <a
-              class="px-8 py-4 font-inter text-center bg-black text-white rounded-lg hover:bg-gray-800"
-              href="#"
-              >Login</a
-            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="icon icon-tabler icon-tabler-user-square-rounded inline-block"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M12 13a3 3 0 1 0 0 -6a3 3 0 0 0 0 6z" />
+                <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
+                <path d="M6 20.05v-.05a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v.05" />
+              </svg>
+              Login / Sign Up
+            </NuxtLink>
           </div>
           <!-- BURGER MENU -->
           <a href="#" class="absolute right-5 lg:hidden" @click="toggleMenu">
@@ -81,21 +67,21 @@
             >
               <path
                 d="M3.75 12H20.25"
-                stroke="#160042"
+                stroke="#ffffff"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               />
               <path
                 d="M3.75 6H20.25"
-                stroke="#160042"
+                stroke="#ffffff"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               />
               <path
                 d="M3.75 18H20.25"
-                stroke="#160042"
+                stroke="#ffffff"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -108,9 +94,9 @@
   </section>
 </template>
 <script setup lang="ts">
-const openMenu = ref(false);
+const openMenu = ref(false)
 
 const toggleMenu = () => {
-  openMenu.value = !openMenu.value;
-};
+  openMenu.value = !openMenu.value
+}
 </script>
