@@ -6,5 +6,5 @@
 </template>
 
 <script setup lang="ts">
-import { Navbar } from '#components'
+import { Navbar } from "#components";
 </script>
