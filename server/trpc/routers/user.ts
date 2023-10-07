@@ -1,5 +1,5 @@
-import { z } from 'zod'
-import { publicProcedure, router } from '../trpc'
+import { z } from "zod";
+import { privateProcedure, publicProcedure, router } from "../trpc";
 
 /**
  * This is an example of a public procedure.
@@ -9,13 +9,17 @@ export const userRouter = router({
   hello: publicProcedure
     .input(
       z.object({
-        text: z.string().nullish()
+        text: z.string().nullish(),
       })
     )
-    .query(({ input }) => {
+    .query(({ input, ctx }) => {
       return {
-        greeting: `hello ${input?.text ?? 'world'}`,
-        time: new Date()
-      }
-    })
-})
+        greeting: `hello ${input?.text ?? "world"}`,
+        time: new Date(),
+      };
+    }),
+  auth_test: privateProcedure.mutation(({ input, ctx }) => {
+    console.log(ctx.user);
+    return JSON.stringify(ctx.user);
+  }),
+});
