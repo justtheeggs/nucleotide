@@ -10,10 +10,175 @@ datasource db {
   provider = "postgres"
 
   // This value is read from the .env file.
-  url      = env("DATABASE_URL")
+  url = env("DATABASE_URL")
 }
 
-model Example {
-  id          String @id @default(uuid())
-  details     String
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
 }
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  // NOTE: If you want to add more fields to your user, this is the place to do it!
+  projects ProjectMember[]
+  requests ProjectRequests[]
+  tag UserTag[]
+  Endorsements Endorsement[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Category {
+  id String @id @default(uuid())
+  name String
+  tags CategoryTag[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model CategoryTag {
+  id String @id @default(uuid())
+  tag_id String
+  tag Tag @relation(fields: [tag_id], references: [id])
+  category_id String
+  categories Category @relation(fields: [category_id], references: [id])
+  project_id String
+  project Project @relation(fields: [project_id], references: [id])
+}
+
+model ProjectTag {
+  id String @id @default(uuid())
+  tag_id String
+  tag Tag @relation(fields: [tag_id], references: [id])
+  project_id String
+  project Project @relation(fields: [project_id], references: [id])
+}
+
+model UserTag {
+  id String @id @default(uuid())
+  tag_id String
+  tag Tag @relation(fields: [tag_id], references: [id])
+  user_id String
+  user User @relation(fields: [user_id], references: [id])
+  Endorsements Endorsement[]
+}
+
+model Tag {
+  id String @id @default(uuid())
+  projects ProjectTag[]
+  users UserTag[]
+  categories CategoryTag[]
+  name String
+  fabricated Boolean
+  created_at DateTime
+  approved_at DateTime
+  deleted Boolean
+}
+
+model Project {
+  id String @id @default(uuid())
+  name String
+  members ProjectMember[]
+  requests ProjectRequests[]
+  tags ProjectTag[]
+  links Link[]
+  categories CategoryTag[]
+  description String
+  images Bytes?
+  status ProjectStatus @default(Planning_Design)
+  geographic_scope String
+  //TODO add sponsors
+  recruiting Boolean
+  created_at DateTime
+  deleted_at DateTime
+  deleted Boolean
+}
+
+model Link {
+  id String @id @default(uuid())
+  name String
+  value String
+  project_id String
+  project Project @relation(fields: [project_id], references: [id])
+}
+
+model ProjectRequests {
+  id String @id @default(uuid())
+  project_id String
+  project Project @relation(fields: [project_id], references: [id])
+  user_id String
+  user User @relation(fields: [user_id], references: [id])
+}
+
+model ProjectMember {
+  id String @id @default(uuid())
+  project_id String
+  project Project @relation(fields: [project_id], references: [id])
+  user_id String
+  user User @relation(fields: [user_id], references: [id])
+  role ProjectRoles @default(Owner)
+  endorsement_count Int @default(5)
+}
+
+model Endorsement {
+  id String @id @default(uuid())
+  user_id String
+  user User @relation(fields: [user_id], references: [id])
+  tag_id String
+  tag UserTag @relation(fields: [tag_id], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+enum ProjectRoles {
+  Owner
+  Moderator
+  Member
+}
+
+enum ProjectStatus {
+  Planning_Design
+  Pending
+  Active
+  Completed
+}
+
+
+
+
+

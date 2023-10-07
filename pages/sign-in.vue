@@ -4,6 +4,7 @@
     <button class="rounded-xl shadow-xl p-2 m-2" @click="signOut()">
       sign out
     </button>
+    <AuthTest/>
   </div>
 </template>
 
@@ -11,4 +12,5 @@
 definePageMeta({ middleware: 'auth' })
 
 const { data, signOut } = useSession()
+
 </script>

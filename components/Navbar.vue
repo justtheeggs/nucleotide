@@ -11,7 +11,9 @@
           class="flex flex-col py-6 lg:py-4 px-6 lg:flex-row lg:px-10 lg:items-center lg:justify-between xl:px-20"
         >
           <!-- SVG LOGO - YOU CAN REPLACE THIS -->
-          <a href="#" class="text-4xl"> Nucleotide </a>
+          <NuxtLink class="text-4xl" to="/">
+            Nucleotide
+          </NuxtLink>
           <!-- MENU CONTENT 1 -->
           <div
             class="flex flex-col lg:flex lg:flex-row mt-14 lg:mt-0 space-y-8 lg:space-y-0 lg:space-x-1"
