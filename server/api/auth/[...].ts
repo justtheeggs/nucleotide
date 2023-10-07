@@ -9,6 +9,11 @@ import { NuxtAuthHandler } from "#auth";
 const prisma = new PrismaClient();
 
 export default NuxtAuthHandler({
+  pages: {
+    signIn: '/signin',
+    signOut: '/signout',
+    error: '/auth/error', // Error code passed in query string as ?error=
+  },
   callbacks: {
     session: async ({ session, token }) => {
       if (session?.user) {
