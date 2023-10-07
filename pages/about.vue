@@ -1,7 +1,7 @@
 <template>
   <DefaultLayout title="About">
     <div class="main-container">
-      <h2>What is Nucleotide?</h2>
+      <SubHeader>What is Nucleotide?</SubHeader>
       <p>
         Interested in science?  Have a science project that needs help?  Nucleotide can help.  Nucleotide is a tool for connecting projects with team members.
         This tool allows users to register, create projects, and list their skills.  As projects progress and tasks complete, project owners can endorse their
