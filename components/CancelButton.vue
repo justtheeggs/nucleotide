@@ -1,5 +1,5 @@
 <template>
-  <BaseButton :class="{'hover:bg-cyan-600 bg-cyan-700':!disabled, 'bg-gray-400':disabled}" :disabled="props.disabled" :to="props.to">
+  <BaseButton class="hover:bg-red-800 bg-red-900" :disabled="props.disabled" :to="props.to">
     <slot />
   </BaseButton>
 </template>
