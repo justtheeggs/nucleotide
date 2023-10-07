@@ -49,6 +49,9 @@ model User {
   accounts      Account[]
   sessions      Session[]
   // NOTE: If you want to add more fields to your user, this is the place to do it!
+  projects ProjectMember[]
+  requests ProjectRequests[]
+  tag UserTag[]
 }
 
 model VerificationToken {
@@ -58,3 +61,87 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+// model category {
+
+// }
+
+model ProjectTag {
+  id String @id @default(uuid())
+  tag_id String
+  tag Tag @relation(fields: [tag_id], references: [id])
+  project_id String
+  project Project @relation(fields: [project_id], references: [id])
+}
+
+model UserTag {
+  id String @id @default(uuid())
+  tag_id String
+  tag Tag @relation(fields: [tag_id], references: [id])
+  user_id String
+  user User @relation(fields: [user_id], references: [id])
+}
+
+model Tag {
+  id String @id @default(uuid())
+  projects ProjectTag[]
+  users UserTag[]
+  name String
+  fabricated Boolean
+  created_at DateTime
+  approved_at DateTime
+  deleted Boolean
+}
+
+model Project {
+  id String @id @default(uuid())
+  name String
+  members ProjectMember[]
+  requests ProjectRequests[]
+  tags ProjectTag[]
+  links String[]
+  description String
+  images Bytes?
+  status ProjectStatus @default(Planning_Design)
+  geographic_scope String
+  //TODO add sponsors
+  recruiting Boolean
+  created_at DateTime
+  deleted_at DateTime
+  deleted Boolean
+}
+
+model ProjectRequests {
+  id String @id @default(uuid())
+  project_id String
+  project Project @relation(fields: [project_id], references: [id])
+  user_id String
+  user User @relation(fields: [user_id], references: [id])
+}
+
+model ProjectMember {
+  id String @id @default(uuid())
+  project_id String
+  project Project @relation(fields: [project_id], references: [id])
+  user_id String
+  user User @relation(fields: [user_id], references: [id])
+  role ProjectRoles @default(Owner)
+}
+
+enum ProjectRoles {
+  Owner
+  Moderator
+  Member
+}
+
+enum ProjectStatus {
+  Planning_Design
+  Pending
+  Active
+  Completed
+}
+
+
+
+
+
