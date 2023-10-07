@@ -26,6 +26,13 @@
       <SubmitButton disabled class="ml-4">
         Disabled Submit Button
       </SubmitButton>
+      <SubHeader>Inline Buttons</SubHeader>
+      <InlineButton class="mr-8">
+        Inline Button
+      </InlineButton>
+      <InlineButton disabled>
+        Disabled Inline Button
+      </InlineButton>
     </div>
   </DefaultLayout>
 </template>
