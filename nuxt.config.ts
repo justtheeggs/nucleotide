@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     {
       path: '~/components',
       extensions: ['.vue'],
-    }
+    },
   ],
   typescript: {
     shim: false
