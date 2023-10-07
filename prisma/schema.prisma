@@ -52,6 +52,7 @@ model User {
   projects ProjectMember[]
   requests ProjectRequests[]
   tag UserTag[]
+  Endorsements Endorsement[]
 }
 
 model VerificationToken {
@@ -62,9 +63,23 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-// model category {
+model Category {
+  id String @id @default(uuid())
+  name String
+  tags CategoryTag[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
 
-// }
+model CategoryTag {
+  id String @id @default(uuid())
+  tag_id String
+  tag Tag @relation(fields: [tag_id], references: [id])
+  category_id String
+  categories Category @relation(fields: [category_id], references: [id])
+  project_id String
+  project Project @relation(fields: [project_id], references: [id])
+}
 
 model ProjectTag {
   id String @id @default(uuid())
@@ -80,12 +95,14 @@ model UserTag {
   tag Tag @relation(fields: [tag_id], references: [id])
   user_id String
   user User @relation(fields: [user_id], references: [id])
+  Endorsements Endorsement[]
 }
 
 model Tag {
   id String @id @default(uuid())
   projects ProjectTag[]
   users UserTag[]
+  categories CategoryTag[]
   name String
   fabricated Boolean
   created_at DateTime
@@ -99,7 +116,8 @@ model Project {
   members ProjectMember[]
   requests ProjectRequests[]
   tags ProjectTag[]
-  links String[]
+  links Link[]
+  categories CategoryTag[]
   description String
   images Bytes?
   status ProjectStatus @default(Planning_Design)
@@ -109,6 +127,14 @@ model Project {
   created_at DateTime
   deleted_at DateTime
   deleted Boolean
+}
+
+model Link {
+  id String @id @default(uuid())
+  name String
+  value String
+  project_id String
+  project Project @relation(fields: [project_id], references: [id])
 }
 
 model ProjectRequests {
@@ -126,6 +152,17 @@ model ProjectMember {
   user_id String
   user User @relation(fields: [user_id], references: [id])
   role ProjectRoles @default(Owner)
+  endorsement_count Int @default(5)
+}
+
+model Endorsement {
+  id String @id @default(uuid())
+  user_id String
+  user User @relation(fields: [user_id], references: [id])
+  tag_id String
+  tag UserTag @relation(fields: [tag_id], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
 
 enum ProjectRoles {
