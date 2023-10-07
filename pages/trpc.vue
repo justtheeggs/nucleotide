@@ -9,4 +9,5 @@ const hello = await $client.root.hello.useQuery({ text: 'World' })
     <!-- As `superjson` is already pre-configured, we can use `time` as a `Date` object without further deserialization 🎉 -->
     tRPC Data: "{{ hello.data.value?.greeting }}" send at "{{ hello.data.value?.time.toLocaleDateString('en-EN') }}".
   </div>
+  <AuthTest/>
 </template>
