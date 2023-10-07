@@ -11,7 +11,9 @@
           class="flex flex-col py-6 lg:py-4 px-6 lg:flex-row lg:px-10 lg:items-center lg:justify-between xl:px-20"
         >
           <!-- SVG LOGO - YOU CAN REPLACE THIS -->
-          <a href="#" class="text-4xl"> Nucleotide </a>
+          <NuxtLink class="text-4xl" to="/">
+            Nucleotide
+          </NuxtLink>
           <!-- MENU CONTENT 1 -->
           <div
             class="flex flex-col lg:flex lg:flex-row mt-14 lg:mt-0 space-y-8 lg:space-y-0 lg:space-x-1"
@@ -32,8 +34,7 @@
             class="flex flex-col lg:flex lg:flex-row space-y-8 lg:space-y-0 lg:space-x-3"
             :class="{ show: openMenu, hidden: !openMenu }"
           >
-            <NuxtLink
-              class="px-8 py-4 font-inter text-center text-white rounded-lg hover:bg-cyan-600 bg-cyan-700 inline-block my-8 lg:my-0"
+            <PrimaryButton
               to="/sign-in"
             >
               <svg
@@ -54,7 +55,7 @@
                 <path d="M6 20.05v-.05a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v.05" />
               </svg>
               Login / Sign Up
-            </NuxtLink>
+            </PrimaryButton>
           </div>
           <!-- BURGER MENU -->
           <a href="#" class="absolute right-5 lg:hidden" @click="toggleMenu">
@@ -94,6 +95,7 @@
   </section>
 </template>
 <script setup lang="ts">
+
 const openMenu = ref(false)
 
 const toggleMenu = () => {
