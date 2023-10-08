@@ -23,6 +23,7 @@ export const router = t.router;
 export const middleware = t.middleware;
 
 export const privateProcedure = publicProcedure.use(({ ctx, next }) => {
+  
   if (!ctx.user) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
