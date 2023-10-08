@@ -138,7 +138,7 @@ model Project {
   links Link[]
   categories ProjectCategory[]
   description String
-  images Bytes?
+  images String?
   status ProjectStatus @default(Planning_Design)
   geographic_scope String
   //TODO add sponsors

@@ -1,6 +1,6 @@
 <template>
   <NuxtLink
-    class="px-8 py-4 font-inter text-center text-white cursor-pointer rounded-lg inline-block font-bold text-lg my-8 lg:my-0"
+    class="px-6 py-2 font-inter text-center text-white cursor-pointer rounded-lg inline-block font-bold text-lg my-8 lg:my-0"
     :to="disabled?undefined:props.to"
   >
     <slot />

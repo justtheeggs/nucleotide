@@ -1,44 +1,43 @@
 <template>
   <!-- Navbar Dropdown 2 rows -->
   <section>
-    <div class="w-screen h-auto bg-cyan-950 text-white text-lg">
+    <div class="w-screen h-auto bg-cyan-950 text-white font-bold text-lg">
       <!-- NAVBAR -->
       <nav
         class="w-full h-auto max-w-[1600px] mx-auto font-inter lg:relative lg:top-0"
       >
         <!-- CONTAINER -->
         <div
-          class="flex flex-col py-6 lg:py-4 px-6 lg:flex-row lg:px-10 lg:items-center xl:px-20"
+          class="flex flex-col py-6 lg:py-4 px-6 lg:flex-row lg:px-10 lg:items-center lg:justify-between xl:px-20"
         >
           <!-- SVG LOGO - YOU CAN REPLACE THIS -->
+          <NuxtLink class="text-4xl" to="/">
+            Nucleotide
+          </NuxtLink>
+          <!-- MENU CONTENT 1 -->
           <div
-            class="flex flex-grow lg:items-center font-bold md:items flex-col lg:flex-row"
+            class="flex flex-col lg:flex lg:flex-row mt-14 lg:mt-0 space-y-8 lg:space-y-0 lg:space-x-1"
+            :class="{ show: openMenu, hidden: !openMenu }"
           >
-            <NuxtLink class="text-4xl" to="/"> Nucleotide </NuxtLink>
-            <!-- MENU CONTENT 1 -->
-            <div
-              class="flex flex-col lg:flex lg:flex-row mt-14 ml-10 lg:mt-0 space-y-8 lg:space-y-0 lg:space-x-1"
-              :class="{ show: openMenu, hidden: !openMenu }"
+            <NuxtLink class="lg:hover:bg-gray-50 font-inter rounded-lg lg:px-6 lg:py-4 lg:hover:text-gray-800">
+              Project Finder
+            </NuxtLink>
+            <NuxtLink
+              to="/about"
+              class="lg:hover:bg-gray-50 font-inter rounded-lg lg:px-6 lg:py-4 lg:hover:text-gray-800"
             >
-              <NuxtLink
-                class="lg:hover:bg-gray-50 font-inter rounded-lg lg:px-6 lg:py-4 lg:hover:text-gray-800 font-bold"
-              >
-                Project Finder
-              </NuxtLink>
-              <NuxtLink
-                to="/about"
-                class="lg:hover:bg-gray-50 font-inter rounded-lg lg:px-6 lg:py-4 lg:hover:text-gray-800 font-bold"
-              >
-                About
-              </NuxtLink>
-            </div>
+              About
+            </NuxtLink>
           </div>
           <!-- MENU CONTENT 2 -->
           <div
             class="flex flex-col lg:flex lg:flex-row space-y-8 lg:space-y-0 lg:space-x-3"
             :class="{ show: openMenu, hidden: !openMenu }"
           >
-            <PrimaryButton to="/signin" :class="{ hidden: authenticated }">
+            <PrimaryButton
+              class="!px-8 !py-4"
+              to="/sign-in"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="icon icon-tabler icon-tabler-user-square-rounded inline-block"
@@ -53,9 +52,7 @@
               >
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path d="M12 13a3 3 0 1 0 0 -6a3 3 0 0 0 0 6z" />
-                <path
-                  d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z"
-                />
+                <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
                 <path d="M6 20.05v-.05a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v.05" />
               </svg>
               Login / Sign Up
@@ -144,16 +141,11 @@
   </section>
 </template>
 <script setup lang="ts">
-import { NAvatar } from "naive-ui";
-import User from "./icons/User.vue";
-import Signout from "./icons/Signout.vue";
-import Projects from "./icons/Projects.vue";
 
-const openMenu = ref(false);
-
-const showUser = ref(false);
+const openMenu = ref(false)
 
 const toggleMenu = () => {
+
   openMenu.value = !openMenu.value;
 };
 
@@ -162,4 +154,5 @@ const toggleProfile = () => {
 };
 const { data: session, status, signOut } = useAuth();
 const authenticated = computed(() => status.value === "authenticated");
+
 </script>
