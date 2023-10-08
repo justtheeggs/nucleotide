@@ -18,9 +18,10 @@
             :class="{ show: openMenu, hidden: !openMenu }"
           >
             <NuxtLink
+              to="discover"
               class="lg:hover:bg-gray-50 font-inter rounded-lg lg:px-6 lg:py-4 lg:hover:text-gray-800"
             >
-              Project Finder
+              Discover
             </NuxtLink>
             <NuxtLink
               to="/about"

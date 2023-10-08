@@ -162,6 +162,7 @@ model ProjectRequests {
   project Project @relation(fields: [project_id], references: [id])
   user_id String
   user User @relation(fields: [user_id], references: [id])
+  accept Boolean @default(false)
 }
 
 model ProjectMember {
