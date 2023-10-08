@@ -37,8 +37,8 @@
             <div class="flex-1 border-2 border-solid p-4">
                 <h1 class="text-lg mb-4">Contributors:</h1>
                 <div class="flex flex-row gap-5">
-                    <ul>
-                        <li v-for="user in data?.members">{{ user.user.name }}</li>
+                    <ul class="list-disc">
+                        <li class="ml-5" v-for="user in data?.members"><NuxtLink class="hover:text-cyan-700" :to="'/user/' + user.id">{{ user.user.name }}</NuxtLink></li>
                     </ul>
                 </div>
             </div>
