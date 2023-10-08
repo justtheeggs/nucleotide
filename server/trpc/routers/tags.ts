@@ -102,7 +102,7 @@ export const tagsRouter = router({
 
   getProjectTags: privateProcedure
     .input(z.object({ id: z.string() }))
-    .query(async ({ input, ctx }) => {
+    .mutation(async ({ input, ctx }) => {
       const tags = await ctx.prisma.tag.findMany({
         where: {
           projects: {
@@ -149,29 +149,38 @@ export const tagsRouter = router({
     return tags.map((tag) => {
       return tag.id + ":" + tag.name;
     });
-
-    // const groups: GroupTags = {};
-    // for (const tag of tags) {
-    //   for (const category of tag.categories) {
-    //     if (groups[category.categories.name] == null) {
-    //       groups[category.categories.name] = {
-    //         type: "group",
-    //         label: category.categories.name,
-    //         key: category.categories.name,
-    //         children: [],
-    //       };
-    //     }
-    //     groups[category.categories.name].children.push({
-    //       label: tag.name,
-    //       value: tag.id,
-    //       id: tag.id,
-    //     });
-    //   }
-    // }
-    // const values = Object.values(groups);
-
-    //return values;
   }),
+  getProjectSelectTags: privateProcedure
+    .input(
+      z.object({
+        project: z.string(),
+      })
+    )
+    .mutation(async ({ ctx }) => {
+      const tags = await ctx.prisma.tag.findMany({
+        where: {
+          projects: {
+            some: {
+              project: {
+                id: ctx.user?.user?.id,
+              },
+            },
+          },
+        },
+        include: {
+          categories: {
+            include: {
+              tag: true,
+              categories: true,
+            },
+          },
+        },
+      });
+
+      return tags.map((tag) => {
+        return tag.id + ":" + tag.name;
+      });
+    }),
   getUserTags: privateProcedure.query(async ({ ctx }) => {
     const tags = await ctx.prisma.tag.findMany({
       where: {
@@ -256,6 +265,75 @@ export const tagsRouter = router({
         await ctx.prisma.userTag.createMany({
           data: tagConnects.map((userTag) => ({
             user_id: userTag.user_id,
+            tag_id: userTag.tag_id,
+          })),
+        });
+      }
+    }),
+
+  addProjectTags: privateProcedure
+    .input(z.object({ tags: z.array(z.string()), project: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      //1. check if the tags exist for the user
+
+      const userTags = await ctx.prisma.projectTag.findMany({
+        where: {
+          id: input.project,
+        },
+      });
+
+      //Delete said tags
+
+      const values = input.tags.reduce(
+        (r, o) => {
+          r[
+            o.includes(":") && o.split(":")[0].length == 0 ? "new" : "ids"
+          ].push(o);
+          return r;
+        },
+        { ids: [] as string[], new: [] as string[] }
+      );
+
+      const deletedTags = userTags
+        .filter(async (item) => {
+          !values.ids.includes(item.id);
+        })
+        .map((item) => {
+          return item.id;
+        });
+
+      const newTags = values.ids
+        .filter(async (item) => {
+          !userTags.some((tag) => tag.id == item);
+        })
+        .map((item) => {
+          return item;
+        });
+
+      if (deletedTags != null) {
+        //delete the tags
+        await ctx.prisma.projectTag.deleteMany({
+          where: {
+            project_id: input.project,
+            id: {
+              in: deletedTags,
+            },
+          },
+        });
+      }
+
+      if (newTags != null) {
+        //add the tags
+        const tagConnects = newTags.map((item) => {
+          return {
+            user_id: ctx.user?.user?.id as string,
+            tag_id: item.split(":")[0],
+          };
+        });
+
+        await ctx.prisma.projectTag.createMany({
+          data: tagConnects.map((userTag) => ({
+            project_id: input.project,
             tag_id: userTag.tag_id,
           })),
         });
