@@ -145,6 +145,47 @@ export const userRouter = router({
     });
     return result?.about;
   }),
+  getUserProjects: publicProcedure
+    .input(
+      z.object({
+        id: z.string().nullish(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      if (input?.id != null) {
+        const projects = await ctx.prisma.project.findMany({
+          where: {
+            members: {
+              some: {
+                user_id: input?.id,
+              },
+            },
+          },
+          include: {
+            tags: {
+              include: {
+                tag: true,
+              },
+            },
+          },
+        });
+
+        //make tags a list of strings for each project, but each tag is a many-many relationship
+        //so we need to map each tag to a string
+        const newProjects = projects.map((project) => {
+          const tags = project.tags.map((tag) => {
+            return tag.tag.name;
+          });
+          return {
+            ...project,
+            tags: tags,
+          };
+        });
+
+        return newProjects;
+      }
+      return null;
+    }),
   updateAbout: privateProcedure
     .input(
       z.object({

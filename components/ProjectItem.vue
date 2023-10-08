@@ -13,9 +13,11 @@
             />
           </div>
           <div class="flex flex-col ml-2">
-            <div class="text-2xl">{{ project.name }}</div>
+            <div class="text-3xl">{{ project.name }}</div>
 
-            <div>{{ project.description ?? "No description provided" }}</div>
+            <div class="text-xl">
+              {{ project.description ?? "No description provided" }}
+            </div>
           </div>
         </div>
         <div class="mt-2">
@@ -37,6 +39,6 @@ const props = defineProps({
 });
 
 const openProject = computed(() => {
-  return `/project/${props.project?.id}`;
+  return `/projects/${props.project?.id}`;
 });
 </script>

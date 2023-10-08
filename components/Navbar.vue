@@ -18,7 +18,7 @@
             :class="{ show: openMenu, hidden: !openMenu }"
           >
             <NuxtLink
-              to="discover"
+              to="/discover"
               class="lg:hover:bg-gray-50 font-inter rounded-lg lg:px-6 lg:py-4 lg:hover:text-gray-800"
             >
               Discover
@@ -79,7 +79,7 @@
               </div>
               <!-- DROP DOWN MENU ONE -->
               <div
-                class="w-full flex flex-col bg-cyan-950 z-50 lg:flex-row lg:flex-wrap lg:absolute lg:top-20 px-5 lg:px-75 lg:py-7 lg:shadow-[0_16px_64px_-15px_rgba(45,96,173,0.15)] py-5 lg:w-[230px] lg:h-[170px] rounded-b-md"
+                class="w-full flex flex-col bg-cyan-950 z-50 lg:flex-row lg:flex-wrap lg:absolute lg:top-20 px-5 lg:px-75 lg:py-7 lg:shadow-[0_16px_64px_-15px_rgba(45,96,173,0.15)] py-5 lg:w-[230px] lg:h-[190px] rounded-b-md"
                 :class="{ show: showUser, 'lg:hidden': !showUser }"
               >
                 <!-- link to profile page with icon to left -->
@@ -91,11 +91,18 @@
                   <div class="ml-6 hover:underline">My Profile</div>
                 </NuxtLink>
                 <NuxtLink
-                  to="/projects"
+                  :to="`/user/${session?.user?.id}`"
                   class="flex text-white font-bold text-lg mb-5 lg:mb-0 h-[40px]"
                 >
                   <div><Projects /></div>
                   <div class="ml-6 hover:underline">My Projects</div>
+                </NuxtLink>
+                <NuxtLink
+                  to="/projects/create"
+                  class="flex text-white font-bold text-lg mb-5 lg:mb-0 h-[40px]"
+                >
+                  <div><Create /></div>
+                  <div class="ml-6 hover:underline">Create Project</div>
                 </NuxtLink>
                 <div
                   @click="signOut()"
@@ -145,6 +152,10 @@
   </section>
 </template>
 <script setup lang="ts">
+import User from "./icons/User.vue";
+import Projects from "./icons/Projects.vue";
+import Signout from "./icons/Signout.vue";
+import Create from "./icons/Create.vue";
 const openMenu = ref(false);
 
 const toggleMenu = () => {

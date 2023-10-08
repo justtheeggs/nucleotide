@@ -3,7 +3,6 @@
     <template v-if="projects.data != null">
       <div v-for="project in cProjects">
         <ProjectItem :project="project" :key="project.id" />
-        <br />
       </div>
     </template>
   </DefaultLayout>
