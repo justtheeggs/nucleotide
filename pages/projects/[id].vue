@@ -1,5 +1,5 @@
 <template>
-    <DefaultLayout title="project">
+    <DefaultLayout title="">
         <div class="flex flex-row mb-10 items-center gap-96">
             <img class="h-auto w-56 flex justify-center items-center" :src="(data?.images as string)">
             <div class="flex flex-1 flex-col justify-center items-center">
@@ -7,8 +7,14 @@
                 <p>{{ data?.description }}</p>
             </div>
         </div>
-        <div class="flex justify-center items-center text-4xl mb-10">
+        <div class="flex justify-center items-center text-4xl mb-5">
             <p>Status: {{ getStatus(data?.status) }}</p>
+        </div>
+        <div class="flex justify-center items-center text-xl mb-5">
+            <p>Geographic Location: United States/Eastern Timezone</p>
+        </div>
+        <div class="flex justify-center items-center text-xl mb-10">
+            <p>Recruiting: Yes</p>
         </div>
         <div class="flex gap-10">
             
@@ -18,7 +24,7 @@
                 {{ getTagNames(data?.tags) }}
                 <p v-for="tag in getTagNames(data?.tags)">{{ tag.name }}</p> -->
                 <div class="flex gap-3 flex-wrap">
-                    <NTag :bordered="false" v-for="tag in getTagNames(data?.tags)">{{ tag.name }}</NTag>
+                    <NTag :bordered="false" v-for="tag in data?.tags">{{ tag.tag.name }}</NTag>
                 </div>
             </div>
             <!-- <p>Tags: {{ data?.tags }}</p> -->
@@ -28,7 +34,14 @@
                     <a class="hover:text-cyan-700" target="_blank" :href="'//' + link.value" v-for="link in data?.links">{{ link.name }}</a>
                 </div>
             </div>
-            
+            <div class="flex-1 border-2 border-solid p-4">
+                <h1 class="text-lg mb-4">Contributors:</h1>
+                <div class="flex flex-row gap-5">
+                    <ul class="list-disc">
+                        <li class="ml-5" v-for="user in data?.members"><NuxtLink class="hover:text-cyan-700" :to="'/user/' + user.id">{{ user.user.name }}</NuxtLink></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </DefaultLayout>
     <!-- <img :src="getUploadingFile(files?.item(0))" /> -->
@@ -39,7 +52,7 @@
 
 <script lang="ts" setup>
 import { DefaultLayout } from '#components';
-import { ProjectStatus, ProjectTag, Tag } from '@prisma/client';
+import { ProjectMember, ProjectStatus, ProjectTag, Tag, User } from '@prisma/client';
 import { NTag } from 'naive-ui';
 const { $client } = useNuxtApp()
 const route = useRoute()
@@ -53,6 +66,14 @@ const { files, open, reset, onChange } = useFileDialog({
 
 const imageUpload = ref<string>("");
 const imageError = ref<string | null>(null);
+
+
+function getUserNames(users: ProjectMember[] | undefined){
+    if(!users) return [] as User[]
+    let pids = users?.map(u => u.user_id);
+    const { data } = $client.projects.get_project_users.useQuery({ids: pids})
+    return data.value;
+}
 
 function getTagNames(tags: ProjectTag[] | undefined): Tag[]{
     if(!tags) return [] as Tag[];

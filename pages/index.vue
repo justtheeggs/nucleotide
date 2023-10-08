@@ -8,19 +8,55 @@
       <lable class="block">
         Search Our Projects
       </lable>
-      <text-input v-model="test" label="Search Our Projects" placeholder="Search..." />
-      <inline-button class="inline-block p-0">
-        Search
-      </inline-button>
-      {{ test }}
+      <text-input v-model="searchText" label="Search Our Projects" placeholder="Search..." />
     </div>
-    <div class="" />
+    <div class="">
+      <div class="grid grid-cols-4 gap-4">
+        <div v-for="project in filteredProjects">
+          <ProjectItem :key="project.id" :project="project" />
+        </div>
+      </div>
+    </div>
   </DefaultLayout>
 </template>
 
 <script setup lang="ts">
+/*
+
 import { NInput } from 'naive-ui'
+import { ProjectStatus, ProjectTag, Tag } from '@prisma/client'
 import { DefaultLayout } from '#components'
 
-const test = ref('')
+const { $client } = useNuxtApp()
+const searchText = ref('')
+const { data } = await $client.search.search.useQuery({ textSearch: searchText.value })
+*/
+
+import { NInput } from 'naive-ui'
+import { Project } from '@prisma/client'
+import { DefaultLayout } from '#components'
+
+type ProjectWithTags<T> = Partial<T> & { tags: string[] };
+
+const { $client } = useNuxtApp()
+
+const projects = await $client.discover.getAllProjects.useQuery()
+const searchText = ref('')
+
+const cProjects = computed(() =>
+  projects.data?.value.map((project) => {
+    return project
+  })
+)
+
+const filteredProjects = computed(() => {
+  const projects = cProjects.value.filter((item) => {
+    if (searchText) {
+      return (item.name.toLowerCase().includes(searchText.value.toLowerCase()))
+    }
+    return true
+  })
+  return projects
+})
+
 </script>
