@@ -46,13 +46,23 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  about         String?
   accounts      Account[]
   sessions      Session[]
+  username      String? 
+  onboarding    Boolean   @default(true)
+  onboarding_state UserOnboarding @default(SetUsername)
   // NOTE: If you want to add more fields to your user, this is the place to do it!
   projects ProjectMember[]
   requests ProjectRequests[]
   tag UserTag[]
   Endorsements Endorsement[]
+}
+
+enum UserOnboarding {
+  SetUsername
+  SetCategories
+  SetTags
 }
 
 model VerificationToken {
@@ -67,6 +77,7 @@ model Category {
   id String @id @default(uuid())
   name String
   tags CategoryTag[]
+  projects ProjectCategory[]
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
@@ -77,6 +88,12 @@ model CategoryTag {
   tag Tag @relation(fields: [tag_id], references: [id])
   category_id String
   categories Category @relation(fields: [category_id], references: [id])
+}
+
+model ProjectCategory {
+  id String @id @default(uuid())
+  category_id String
+  category Category @relation(fields: [category_id], references: [id])
   project_id String
   project Project @relation(fields: [project_id], references: [id])
 }
@@ -98,15 +115,17 @@ model UserTag {
   Endorsements Endorsement[]
 }
 
+
+
 model Tag {
   id String @id @default(uuid())
   projects ProjectTag[]
   users UserTag[]
-  categories CategoryTag[]
-  name String
-  fabricated Boolean
-  created_at DateTime
-  approved_at DateTime
+  categories CategoryTag[] 
+  name String 
+  fabricated Boolean 
+  created_at DateTime 
+  approved_at DateTime 
   deleted Boolean
 }
 
@@ -117,9 +136,9 @@ model Project {
   requests ProjectRequests[]
   tags ProjectTag[]
   links Link[]
-  categories CategoryTag[]
+  categories ProjectCategory[]
   description String
-  images Bytes?
+  images String?
   status ProjectStatus @default(Planning_Design)
   geographic_scope String
   //TODO add sponsors

@@ -10,9 +10,9 @@ const prisma = new PrismaClient();
 
 export default NuxtAuthHandler({
   pages: {
-    signIn: '/signin',
-    signOut: '/signout',
-    error: '/auth/error', // Error code passed in query string as ?error=
+    signIn: "/signin",
+    signOut: "/signout",
+    error: "/auth/error", // Error code passed in query string as ?error=
   },
   callbacks: {
     session: async ({ session, token }) => {
@@ -32,7 +32,7 @@ export default NuxtAuthHandler({
     strategy: "jwt",
   },
   // TODO: SET A STRONG SECRET, SEE https://sidebase.io/nuxt-auth/configuration/nuxt-auth-handler#secret
-  secret: process.env.AUTH_SECRET,
+  secret: "sssojdofjsdf",
   // TODO: ADD YOUR OWN AUTHENTICATION PROVIDER HERE, READ THE DOCS FOR MORE: https://sidebase.io/nuxt-auth
   providers: [
     // @ts-expect-error You need to use .default here for it to work during SSR. May be fixed via Vite at some point
