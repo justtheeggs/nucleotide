@@ -163,6 +163,7 @@ model ProjectRequests {
   user_id String
   user User @relation(fields: [user_id], references: [id])
   accept Boolean @default(false)
+  reason String
 }
 
 model ProjectMember {

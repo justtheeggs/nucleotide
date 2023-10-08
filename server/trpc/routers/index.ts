@@ -1,16 +1,19 @@
-import { router } from '../trpc'
+
+import { router } from "../trpc";
+import { userRouter } from "./user";
+import { tagsRouter } from "./tags";
+import { projectRouter } from "./projects";
+import { discoverRouter } from "./discover";
+import { createRouter } from "./create";
 import { searchRouter } from './search'
-import { userRouter } from './user'
-import { tagsRouter } from './tags'
-import { projectRouter } from './projects'
-import { discoverRouter } from './discover'
 
 export const appRouter = router({
-  root: userRouter,
+  user: userRouter,
   search: searchRouter,
   tags: tagsRouter,
   projects: projectRouter,
-  discover: discoverRouter
+  discover: discoverRouter,
+  create: createRouter,
 })
 
 // export type definition of API
