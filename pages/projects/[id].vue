@@ -7,13 +7,26 @@
                 <p>{{ data?.description }}</p>
             </div>
         </div>
-        <div>
+        <div class="flex justify-center items-center text-4xl mb-10">
             <p>Status: {{ getStatus(data?.status) }}</p>
-            <p>Tags: {{ data?.tags }}</p>
-            <!-- <a target="_blank" :href="'//' + link.value" v-for="link in data?.links">{{ link.name }}</a> -->
-            <div class="border-2 border-solid p-4">
+        </div>
+        <div class="flex gap-10">
+            
+            <div class="flex-1 border-2 border-solid p-4">
+                <h1 class="text-lg mb-4">Tags:</h1>
+                <!-- {{ data?.tags }}
+                {{ getTagNames(data?.tags) }}
+                <p v-for="tag in getTagNames(data?.tags)">{{ tag.name }}</p> -->
+                <div class="flex gap-3 flex-wrap">
+                    <NTag :bordered="false" v-for="tag in getTagNames(data?.tags)">{{ tag.name }}</NTag>
+                </div>
+            </div>
+            <!-- <p>Tags: {{ data?.tags }}</p> -->
+            <div class="flex-1 border-2 border-solid p-4">
                 <h1 class="text-lg mb-4">Links:</h1>
-                <NMenu :root-indent="0" :indent="0" :options="getMenuOptions(data?.links)" mode="horizontal"></NMenu>
+                <div class="flex flex-row gap-5">
+                    <a class="hover:text-cyan-700" target="_blank" :href="'//' + link.value" v-for="link in data?.links">{{ link.name }}</a>
+                </div>
             </div>
             
         </div>
@@ -26,11 +39,8 @@
 
 <script lang="ts" setup>
 import { DefaultLayout } from '#components';
-import { ProjectStatus, Link } from '@prisma/client';
-import { defineComponent, h, ref, Component } from 'vue'
-import { NMenu } from 'naive-ui'
-import type { MenuOption } from 'naive-ui'
-import { NIcon } from 'naive-ui'
+import { ProjectStatus, ProjectTag, Tag } from '@prisma/client';
+import { NTag } from 'naive-ui';
 const { $client } = useNuxtApp()
 const route = useRoute()
 const { data } = await $client.projects.get_individual_project.useQuery({ id: (route.params.id as string) })
@@ -44,24 +54,13 @@ const { files, open, reset, onChange } = useFileDialog({
 const imageUpload = ref<string>("");
 const imageError = ref<string | null>(null);
 
-function getMenuOptions(links: Link[] | undefined){
-    let options: MenuOption[] = [];
-    if(!links) return options;
-    for(let link of links){
-        options.push({
-            label: () =>
-            h(
-                'a',
-            {
-                href: link.value,
-                target: '_blank',
-            },
-            link.name
-            ),
-            key: link.id,
-        })
-    }
-    return options;
+function getTagNames(tags: ProjectTag[] | undefined): Tag[]{
+    if(!tags) return [] as Tag[];
+    let pids = tags.map(t => t.tag_id);
+    console.log(pids)
+    const { data } = $client.projects.get_project_tagnames.useQuery({ids: pids})
+    console.log(data)
+    return data.value;
 }
 
 function getStatus(status: ProjectStatus | undefined){
@@ -111,3 +110,5 @@ const submit = () => {
 };
 
 </script>
+
+

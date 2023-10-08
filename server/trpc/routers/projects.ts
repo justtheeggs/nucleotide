@@ -35,7 +35,7 @@ export const projectRouter = router({
     get_individual_project: publicProcedure
         .input(id)
         .query( async ({ input, ctx }) => {
-            const result = await ctx.prisma.project.findFirst({
+            return await ctx.prisma.project.findFirst({
                 where: {
                     id: input.id,
                 },
@@ -46,36 +46,32 @@ export const projectRouter = router({
                     categories: true,
                 }
             })
-            
-            return result; 
         }),
 
-    get_project_tags: publicProcedure
+    get_project_tagnames: publicProcedure
         .input(ids)
         .query( async ({input, ctx}) => {
-            const result = await ctx.prisma.tag.findMany({
+            return await ctx.prisma.tag.findMany({
                 where: {
                     id: { in: input.ids }
                 }
             })
-            return result;
         }),
 
     get_project_members: publicProcedure
         .input(ids)
         .query(async ({input, ctx}) => {
-            const result = await ctx.prisma.user.findMany({
+            return await ctx.prisma.user.findMany({
                 where: {
                     id: { in: input.ids }
                 }
             })
-            return result;
         }),
     
     get_project_links: publicProcedure
         .input(ids)
         .query(async ({input, ctx}) => {
-            const result = await ctx.prisma.user.findMany({
+            return await ctx.prisma.user.findMany({
                 where: {
                     id: { in: input.ids }
                 }
