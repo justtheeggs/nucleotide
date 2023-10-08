@@ -26,12 +26,10 @@
           <b>Status</b>
           <br />
           <select v-model="status">
-            <option :value="ProjectStatus.Planning_Design">
-              Planning/Design
-            </option>
-            <option :value="ProjectStatus.Pending">Pending</option>
-            <option :value="ProjectStatus.Active">Active</option>
-            <option :value="ProjectStatus.Completed">Completed</option>
+            <option value="Planning_Design">Planning/Design</option>
+            <option value="Pending">Pending</option>
+            <option value="Active">Active</option>
+            <option value="Completed">Completed</option>
           </select>
         </NCard>
         <br />
@@ -76,7 +74,6 @@
 <script setup lang="ts">
 import { NInput, NButton, NCard } from "naive-ui";
 import { DefaultLayout, ProjectTags } from "#components";
-import { Project, ProjectStatus } from "@prisma/client";
 
 type ProjectWithTags<T> = Partial<T> & { tags: string[] };
 
