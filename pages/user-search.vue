@@ -22,11 +22,11 @@
 
 <script setup lang="ts">
 
-import { NInput, tagDark } from 'naive-ui'
+import { NInput } from 'naive-ui'
 import { Project } from '@prisma/client'
 import { DefaultLayout } from '#components'
 
-type ProjectWithTags<T> = Partial<T> & { tags: string[] };
+  type ProjectWithTags<T> = Partial<T> & { tags: string[] };
 
 const { $client } = useNuxtApp()
 
@@ -42,26 +42,11 @@ const cProjects = computed(() =>
 const filteredProjects = computed(() => {
   const projects = cProjects.value.filter((item) => {
     if (searchText) {
-      return (
-        item.name.toLowerCase().includes(searchText.value.toLowerCase()) ||
-        tagsContain(item.tags, searchText.value)
-      )
+      return (item.name.toLowerCase().includes(searchText.value.toLowerCase()))
     }
     return true
   })
   return projects
 })
-
-function tagsContain (tags, searchString):Boolean {
-  let result = false
-
-  tags.forEach((tag) => {
-    if (tag.toLowerCase().includes(searchString.toLowerCase())) {
-      result = true
-    }
-  })
-
-  return result
-}
 
 </script>
