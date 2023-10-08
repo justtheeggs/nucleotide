@@ -8,13 +8,24 @@
       <lable class="block">
         Search Our Projects
       </lable>
-      <text-input v-model="test" label="Search Our Projects" placeholder="Search..." />
+      <text-input v-model="searchText" label="Search Our Projects" placeholder="Search..." />
       <inline-button class="inline-block p-0">
         Search
       </inline-button>
-      {{ test }}
     </div>
-    <div class="" />
+    <div class="">
+      <div class="grid grid-cols-4">
+        <div>
+          Project Name
+        </div>
+        <div>
+          Project Tags
+        </div>
+        <div>
+          Date
+        </div>
+      </div>
+    </div>
   </DefaultLayout>
 </template>
 
@@ -22,5 +33,5 @@
 import { NInput } from 'naive-ui'
 import { DefaultLayout } from '#components'
 
-const test = ref('')
+const searchText = ref('')
 </script>
