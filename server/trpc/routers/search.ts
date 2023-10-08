@@ -8,13 +8,18 @@ export const searchRouter = router({
   )
 
     .query(async ({ input, ctx }) => {
+      // ctx.prisma.project.fields.
       if (input.textSearch) {
-        const result = await ctx.prisma.user.findMany({
+        const result = await ctx.prisma.project.findMany({
           where: {
-            name: {
-              contains: input.textSearch,
-              mode: 'insensitive'
-            }
+            AND: [
+              {
+                name: {
+                  contains: input.textSearch,
+                  mode: 'insensitive'
+                }
+              }
+            ]
           },
           select: {
             name: true

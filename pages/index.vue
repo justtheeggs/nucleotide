@@ -15,14 +15,12 @@
     </div>
     <div class="">
       <div class="grid grid-cols-4">
-        <div>
-          Project Name
-        </div>
-        <div>
-          Project Tags
-        </div>
-        <div>
-          Date
+        <div v-for="item in filteredProjects">
+          <label>Project Name</label>{{ item.name }}
+          <br>
+          <lable>Project Tags</lable>
+          <br>
+          <lable>Project Tags</lable>
         </div>
       </div>
     </div>
@@ -30,8 +28,38 @@
 </template>
 
 <script setup lang="ts">
+/*
+
 import { NInput } from 'naive-ui'
+import { ProjectStatus, ProjectTag, Tag } from '@prisma/client'
 import { DefaultLayout } from '#components'
 
+const { $client } = useNuxtApp()
 const searchText = ref('')
+const { data } = await $client.search.search.useQuery({ textSearch: searchText.value })
+*/
+
+import { NInput } from 'naive-ui'
+import { Project } from '@prisma/client'
+import { DefaultLayout } from '#components'
+
+type ProjectWithTags<T> = Partial<T> & { tags: string[] };
+
+const { $client } = useNuxtApp()
+
+const projects = await $client.discover.getAllProjects.useQuery()
+const searchText = ref('')
+
+const cProjects = computed(() =>
+  projects.data?.value.map((project) => {
+    return project
+  })
+)
+
+const filteredProjects = computed(() => {
+  return cProjects.value.filter((item) => {
+    return (item.name.toLowerCase().indexOf(searchText.value.toLowerCase()))
+  })
+})
+
 </script>
