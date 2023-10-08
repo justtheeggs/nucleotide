@@ -1,5 +1,9 @@
 <template>
     <DefaultLayout title="">
+        <div class="flex justify-end gap-5">
+            <RouterLink class="hover:text-cyan-700 text-xl" :to="`/projects/${data?.id}/update/`">Edit</RouterLink>
+            <RouterLink class="hover:text-cyan-700 text-xl" :to="`/projects/${data?.id}/request/`">Request</RouterLink>
+        </div>
         <div class="flex flex-row mb-10 items-center gap-96">
             <img class="h-auto w-56 flex justify-center items-center" :src="(data?.images as string)">
             <div class="flex flex-1 flex-col justify-center items-center">
@@ -57,6 +61,8 @@ import { NTag } from 'naive-ui';
 const { $client } = useNuxtApp()
 const route = useRoute()
 const { data } = await $client.projects.get_individual_project.useQuery({ id: (route.params.id as string) })
+const { data: session, status, signOut } = useAuth();
+const authenticated = computed(() => status.value === "authenticated");
 
 import { useFileDialog } from "@vueuse/core";
 import { read, stat } from 'fs';
