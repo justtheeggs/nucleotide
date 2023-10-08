@@ -32,30 +32,17 @@ export const projectRouter = router({
         };
         }),
 
-    get_individual_project: publicProcedure
-        .input(id)
-        .query( async ({ input, ctx }) => {
-            return await ctx.prisma.project.findFirst({
-                where: {
-                    id: input.id,
-                },
-                include: {
-                    tags: true,
-                    members: true,
-                    links: true,
-                    categories: true,
-                }
-            })
-        }),
-
     get_project_tagnames: publicProcedure
         .input(ids)
         .query( async ({input, ctx}) => {
-            return await ctx.prisma.tag.findMany({
+            const text = await ctx.prisma.tag.findMany({
                 where: {
                     id: { in: input.ids }
                 }
             })
+            console.log("hello world")
+            console.log(text)
+            return text;
         }),
 
     get_project_members: publicProcedure
@@ -76,7 +63,57 @@ export const projectRouter = router({
                     id: { in: input.ids }
                 }
             })
-        })
+        }),
+
+    get_project_users: publicProcedure
+        .input(ids)
+        .query(async ({input, ctx}) => {
+            return await ctx.prisma.category.findMany({
+                where: {
+                    id: {in: input.ids}
+                }
+            })
+        }),
+
+    get_individual_project: publicProcedure.input(id).query(async ({ input, ctx }) => {
+        const projects = await ctx.prisma.project.findUnique({
+            where: {
+                id: input.id
+            },
+            include: {
+            links: true,
+            tags: {
+                include: {
+                tag: true,
+                },
+            },
+            members: {
+                include: {
+                    user: true,
+                },
+            },
+            },
+        });
+    
+        return projects;
+        }),
+
+        // get_individual_project: publicProcedure
+        // .input(id)
+        // .query( async ({ input, ctx }) => {
+        //     return await ctx.prisma.project.findFirst({
+        //         where: {
+        //             id: input.id,
+        //         },
+        //         include: {
+        //             tags: true,
+        //             members: true,
+        //             links: true,
+        //             categories: true,
+        //         }
+        //     })
+        // }),
+
     
     // submit_image: privateProcedure
     //     .input(img)
