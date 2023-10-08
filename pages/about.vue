@@ -25,6 +25,17 @@
         for a mild mannered insurance company in Flint, Michigan. By night we challenge ourselves with coding and camaraderie.
         We joined the 2022 NASA Space Apps challenge with the goal of expanding our skills and experiencing NASA to the fullest.
       </p>
+      <SubHeader>Technologies Used</SubHeader>
+      <ul>
+        <li><a href="https://vuejs.org/" target="_blank">Vue.js</a></li>
+        <li><a href="https://www.prisma.io/" target="_blank">Prisma</a></li>
+        <li><a href="https://nodejs.org/" target="_blank">Node.js</a></li>
+        <li><a href="https://www.docker.com/" target="_blank">Docker</a></li>
+        <li><a href="https://nuxt.com/" target="_blank">Nuxt</a></li>
+        <li><a href="https://www.typescriptlang.org/" target="_blank">Typescript</a></li>
+        <li><a href="https://github.com/" target="_blank">Github</a></li>
+        <li><a href="https://www.naiveui.com/" target="_blank">Naive</a></li>
+      </ul>
     </div>
   </DefaultLayout>
 </template>

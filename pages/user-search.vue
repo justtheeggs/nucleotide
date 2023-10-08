@@ -1,19 +1,15 @@
 <template>
-  <DefaultLayout title="Welcome to Nucleotide">
-    <p>
-      Nucleotide is a tool for pairing open science projects with with
-      users.
-    </p>
+  <DefaultLayout title="User Search">
     <div class="my-4">
       <lable class="block">
-        Search Our Projects
+        Search Our Users
       </lable>
       <text-input v-model="searchText" label="Search Our Projects" placeholder="Search..." />
     </div>
     <div class="">
       <div class="grid grid-cols-4 gap-4">
-        <div v-for="project in filteredProjects">
-          <ProjectItem :key="project.id" :project="project" />
+        <div v-for="item in cUsers">
+          <UserItem :key="item.id" :project="item" />
         </div>
       </div>
     </div>
@@ -23,30 +19,51 @@
 <script setup lang="ts">
 
 import { NInput } from 'naive-ui'
-import { Project } from '@prisma/client'
+import { User } from '@prisma/client'
 import { DefaultLayout } from '#components'
 
-  type ProjectWithTags<T> = Partial<T> & { tags: string[] };
+type UserWithTags<T> = Partial<T> & { tags: string[] };
 
 const { $client } = useNuxtApp()
 
-const projects = await $client.discover.getAllProjects.useQuery()
+const users = await $client.discover.getAllUsers.useQuery()
 const searchText = ref('')
+/*
+const cUsers = computed(() => {
+  let items
+  if (users.data) {
+    items = users.data?.value.map((item) => {
+      return item
+    })
+  }
+  return items
+})
 
-const cProjects = computed(() =>
-  projects.data?.value.map((project) => {
-    return project
-  })
-)
+  const filteredUsers = computed(() => {
+  const userList = cUsers.value.filter((item) => {
 
-const filteredProjects = computed(() => {
-  const projects = cProjects.value.filter((item) => {
-    if (searchText) {
-      return (item.name.toLowerCase().includes(searchText.value.toLowerCase()))
+    if (searchText && item.name) {
+      return (
+        item.name.toLowerCase().includes(searchText.value.toLowerCase()) // ||
+        // tagsContain(item.tags, searchText.value)
+      )
     }
+
     return true
   })
-  return projects
+  return userList
 })
+
+function tagsContain (tags, searchString):Boolean {
+  let result = false
+
+  tags.forEach((tag) => {
+    if (tag.toLowerCase().includes(searchString.toLowerCase())) {
+      result = true
+    }
+  })
+
+  return result
+} */
 
 </script>
