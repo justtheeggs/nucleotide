@@ -9,18 +9,11 @@
         Search Our Projects
       </lable>
       <text-input v-model="searchText" label="Search Our Projects" placeholder="Search..." />
-      <inline-button class="inline-block p-0">
-        Search
-      </inline-button>
     </div>
     <div class="">
-      <div class="grid grid-cols-4">
-        <div v-for="item in filteredProjects">
-          <label>Project Name</label>{{ item.name }}
-          <br>
-          <lable>Project Tags</lable>
-          <br>
-          <lable>Project Tags</lable>
+      <div class="grid grid-cols-4 gap-4">
+        <div v-for="project in filteredProjects">
+          <ProjectItem :key="project.id" :project="project" />
         </div>
       </div>
     </div>
@@ -57,9 +50,13 @@ const cProjects = computed(() =>
 )
 
 const filteredProjects = computed(() => {
-  return cProjects.value.filter((item) => {
-    return (item.name.toLowerCase().indexOf(searchText.value.toLowerCase()))
+  const projects = cProjects.value.filter((item) => {
+    if (searchText) {
+      return (item.name.toLowerCase().includes(searchText.value.toLowerCase()))
+    }
+    return true
   })
+  return projects
 })
 
 </script>
