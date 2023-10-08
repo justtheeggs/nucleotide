@@ -133,4 +133,36 @@ export const userRouter = router({
         message: "Username could not be updated.",
       };
     }),
+
+  getAbout: privateProcedure.query(async ({ ctx }) => {
+    const result = await ctx.prisma.user.findUnique({
+      where: {
+        id: ctx.user?.user?.id,
+      },
+      select: {
+        about: true,
+      },
+    });
+    return result?.about;
+  }),
+  updateAbout: privateProcedure
+    .input(
+      z.object({
+        about: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      await ctx.prisma.user.update({
+        where: {
+          id: ctx.user?.user?.id,
+        },
+        data: {
+          about: input?.about,
+        },
+      });
+      return {
+        error: false,
+        message: "About updated",
+      };
+    }),
 });

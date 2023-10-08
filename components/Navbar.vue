@@ -155,6 +155,7 @@ const showUser = ref(false);
 const toggleProfile = () => {
   showUser.value = !showUser.value;
 };
+
 const { data: session, status, signOut } = useAuth();
 const authenticated = computed(() => status.value === "authenticated");
 </script>
