@@ -1,0 +1,7 @@
+version: "3"
+services:
+  nucleotide:
+    build:
+      context: .
+    ports:
+      - "5000:3000"
