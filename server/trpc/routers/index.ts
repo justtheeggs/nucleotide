@@ -1,8 +1,9 @@
 import { router } from '../trpc'
 import { userRouter } from './user'
-
+import {tagsRouter} from './tags'
 export const appRouter = router({
-  root: userRouter
+  user: userRouter,
+  tags: tagsRouter
 })
 
 // export type definition of API

@@ -96,13 +96,13 @@
                   <div><Projects /></div>
                   <div class="ml-6 hover:underline">My Projects</div>
                 </NuxtLink>
-                <NuxtLink
-                  to="/signout"
+                <div
+                  @click="signOut()"
                   class="flex text-white font-bold text-lg mb-5 lg:mb-0 h-[40px]"
                 >
                   <div><Signout /></div>
                   <div class="ml-6 hover:underline">Sign Out</div>
-                </NuxtLink>
+                </div>
               </div>
             </div>
           </div>
@@ -160,6 +160,6 @@ const toggleMenu = () => {
 const toggleProfile = () => {
   showUser.value = !showUser.value;
 };
-const { data: session, status } = useSession();
+const { data: session, status, signOut } = useAuth();
 const authenticated = computed(() => status.value === "authenticated");
 </script>

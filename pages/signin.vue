@@ -33,7 +33,7 @@
 <script setup lang="ts">
 //definePageMeta({ middleware: 'auth' })
 import { AuthLayout } from "#components";
-const { data, signOut, signIn, status } = useSession();
+const { data, signOut, signIn, status } = useAuth();
 
 if (data.value?.user) {
   await navigateTo("/");
