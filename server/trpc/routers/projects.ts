@@ -111,6 +111,7 @@ export const projectRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       console.log(input);
+
       const result = await ctx.prisma.project.update({
         where: {
           id: input.id,
@@ -133,6 +134,121 @@ export const projectRouter = router({
         status: true,
       };
     }),
+  get_requested_members: privateProcedure
+    .input(id)
+    .query(async ({ input, ctx }) => {
+      if (ctx.user?.user?.id) {
+        const result = await ctx.prisma.projectRequests.findMany({
+          where: {
+            project: {
+              id: input.id,
+            },
+          },
+          include: {
+            user: true,
+          },
+        });
+        return result;
+      }
+    }),
+  decline_member: privateProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        user: z.string(),
+        request: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      if (ctx.user?.user?.id) {
+        const result = await ctx.prisma.projectRequests.delete({
+          where: {
+            id: input.request,
+          },
+        });
+        return {
+          message: "Member request removed",
+          status: true,
+        };
+      }
+    }),
+
+  request_member: privateProcedure
+    .input(
+      z.object({
+        project: z.string(),
+        reason: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      //check if they already hav a project request
+      const result = await ctx.prisma.projectRequests.count({
+        where: {
+          user_id: ctx.user?.user?.id,
+        },
+      });
+
+      if (result == 0) {
+        await ctx.prisma.projectRequests.create({
+          data: {
+            project: {
+              connect: {
+                id: input.project,
+              },
+            },
+            user: {
+              connect: {
+                id: ctx.user?.user?.id,
+              },
+            },
+            reason: input.reason,
+          },
+        });
+        return {
+          status: true,
+          message: "Request sent",
+        };
+      }
+      return {
+        status: false,
+        message: "Request already sent",
+      };
+    }),
+  accept_member: privateProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        user: z.string(),
+        request: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      if (ctx.user?.user?.id) {
+        const result = await ctx.prisma.projectRequests.delete({
+          where: {
+            id: input.request,
+          },
+        });
+        const result2 = await ctx.prisma.project.update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            members: {
+              create: {
+                user_id: input.user,
+              },
+            },
+          },
+        });
+
+        return {
+          message: "Member added",
+          status: true,
+        };
+      }
+    }),
+
   // get_individual_project: publicProcedure
   // .input(id)
   // .query( async ({ input, ctx }) => {
@@ -165,3 +281,5 @@ export const projectRouter = router({
   //     })
   // }),
 });
+
+//write th more to the comment below
